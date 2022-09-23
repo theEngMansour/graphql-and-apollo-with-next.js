@@ -11,7 +11,7 @@ export const typeDefs = gql`
     image: Image
     cumulativeGPA: Float!
     gender: Gender!
-    friends: [Friend!]!
+    friends(cumulativeGPA: Float = 50.0): [Friend!]!
   }
 
   enum Gender {
@@ -36,13 +36,27 @@ export const typeDefs = gql`
   type Query {
     users: [User]
     usersCount: Int
-    cumulativeGPA: [Float]
-    males: [User]
-    over25YearsOld: [String]
-    firstUser: User
-    excellentMaleUsers: [User]
-    mohammadUsers: [User]
-    graduatedUsers: [User],
-    hasMore2Friends: [User]
+    cumulativeGPAs: [Float]
+    usersByGender(gender: Gender!): [User]
+    userById(id: ID!): User,
+    userByName(name: String!): [String]
+    usersWithAgeBetween(min: Int!, max: Int!): [String]
+    getUsersByFriendsNumber(friendsNumber: Int!): [User]
+    getImages(width: Int!, height: Int!): [Image]
+    graduatedUsers: [User]
+    getUsersByGenderAndCumulativeGPA(gender: Gender!, cumulativeGPA: Float!): [User]
   }
 `
+
+/* type Query {
+  users: [User]
+  usersCount: Int
+  cumulativeGPA: [Float]
+  males: [User]
+  over25YearsOld: [String]
+  firstUser: User
+  excellentMaleUsers: [User]
+  mohammadUsers: [User]
+  graduatedUsers: [User]
+  hasMore2Friends: [User]
+} */
