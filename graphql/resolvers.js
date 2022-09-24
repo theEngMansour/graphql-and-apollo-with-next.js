@@ -28,6 +28,9 @@ export const resolvers = {
   },
 
   User: {
+    email: (parent, args, context, info) => {
+      return parent.email.toUpperCase()
+    },
     friends: (parent, { cumulativeGPA }, context, info) => {
       return parent.friends.filter(
         friend => friend.cumulativeGPA == cumulativeGPA

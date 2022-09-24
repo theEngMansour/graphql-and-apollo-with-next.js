@@ -1,17 +1,19 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
+  directive @upper on FIELD_DEFINITION
+
   type User {
     id: ID!
-    name: String!
+    name: String! @upper
     email: String!
-    mobile: String!
+    mobile: String! @deprecated(reason: "use email instead from mobile")
     age: Int!
     isGraduated: Boolean
     image: Image
     cumulativeGPA: Float!
     gender: Gender!
-    friends(cumulativeGPA: Float = 50.0): [Friend!]!
+    friends(cumulativeGPA: Float = 50.0  @deprecated): [Friend!]!
   }
 
   enum Gender {
@@ -20,7 +22,7 @@ export const typeDefs = gql`
   }
 
   type Friend {
-    name: String!
+    name: String! @upper
     email: String!
     gender: Gender!
     mobile: String
