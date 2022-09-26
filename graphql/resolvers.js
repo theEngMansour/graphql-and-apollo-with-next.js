@@ -4,7 +4,6 @@ export const resolvers = {
     MALE: "male",
     FEMALE: "female"
   },
-  
   Query: {
     users: () => users,
     usersCount: () => users.length,
@@ -26,17 +25,65 @@ export const resolvers = {
       user => user.gender == gender && user.cumulativeGPA >= cumulativeGPA
     )
   },
-
-  User: {
-    email: (parent, args, context, info) => {
-      return parent.email.toUpperCase()
+  Mutation : {
+    createUser: (_, args) => {
+      const check = users.find(user => user.email === args.newUser.email)
+      if(check) {
+        throw new Error("email is used !")
+      }
+      const user = {...args.newUser, id: users.length + 1}
+      users = users.concat(user)
+      console.log(user)
+      return user
     },
+    addFriend: (_, args) => {
+      const user = users.find(user => user.id == args.userId)
+      let userFriends = user.friends
+      const friend = args.newFriend
+      userFriends = userFriends.concat(friend)
+      users = users.map(user => user.id == args.userId ? {...user, friends: userFriends} : user)
+      return userFriends
+    },
+    updateUserEmail: (_, args) => {
+      if(users.find(user => user.email === args.email)){
+        throw new Error("email is used !")
+      }
+      const user = users.find(user => user.id == args.userId)
+      const updatedUser = {...user, email: args.email}
+      users = users.map(user => user.id == args.userId ? updatedUser : user)
+      return updatedUser
+    },
+    setImage: (_, args) => {
+      const user = users.find(user => user.id == args.userId)
+      const updatedUser = { ...user, image: args.imageUpdate}
+      users = users.map(user => user.id == args.userId ? updatedUser : user)
+      return updatedUser
+    },
+    setName: (_, args) => {
+      const user = users.find(user => user.id == args.userId)
+      const updatedUser = { ...user, name: args.newName}
+      users = users.map(user => user.id == args.userId ? updatedUser : user)
+      return updatedUser
+    },
+    deleteUser: (_, args) => {
+      users = users.filter(user => user.id != args.id)
+      return users
+    },
+    removeFriend: (_, args) => {
+      const user = users.find(user => user.id == args.userId)
+      let userFriends = user.friends
+      userFriends = userFriends.filter(friend => friend.email !== args.friendEmail)
+      users = users.map(user => user.id == args.userId ? {...user, friends: userFriends}: user)
+      return userFriends
+    }
+  },
+/*   User: {
     friends: (parent, { cumulativeGPA }, context, info) => {
       return parent.friends.filter(
         friend => friend.cumulativeGPA == cumulativeGPA
       )
     }
-  }
+  } */
 
 /* Query: {
     users: () => users,

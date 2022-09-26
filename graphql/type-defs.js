@@ -7,7 +7,7 @@ export const typeDefs = gql`
     id: ID!
     name: String! @upper
     email: String!
-    mobile: String! @deprecated(reason: "use email instead from mobile")
+    mobile: String! """ @deprecated(reason: "use email instead from mobile") """
     age: Int!
     isGraduated: Boolean
     image: Image
@@ -47,6 +47,47 @@ export const typeDefs = gql`
     getImages(width: Int!, height: Int!): [Image]
     graduatedUsers: [User]
     getUsersByGenderAndCumulativeGPA(gender: Gender!, cumulativeGPA: Float!): [User]
+  }
+
+  input UserInput {
+    name: String!
+    email: String!
+    gender: Gender!
+    image: ImageInput!
+    cumulativeGPA: Float!
+    mobile: String!
+    isGraduated: Boolean!
+    friends: [FriendInput!]!
+    age: Int!
+  }
+
+  type Mutation {
+    createUser( newUser: UserInput): User
+
+    addFriend(
+      userId: ID!
+      newFriend: FriendInput!
+    ): [Friend]
+
+    updateUserEmail(userId: ID!, email: String!): User
+    setImage(userId: ID!, imageUpdate: ImageInput!): User
+    setName(userId: ID!, newName: String!): User
+    deleteUser(id: ID!): [User]
+    removeFriend(userId: ID!, friendEmail: String!): [Friend]
+  }
+
+  input FriendInput {
+    name: String! 
+    email: String!
+    gender: Gender!
+    mobile: String!
+    cumulativeGPA: Float!
+  }
+
+  input ImageInput {
+    name: String!
+    height: Int!
+    width: Int!
   }
 `
 
