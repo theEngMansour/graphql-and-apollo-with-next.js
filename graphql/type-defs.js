@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-micro';
 export const typeDefs = gql`
   directive @upper on FIELD_DEFINITION
 
-  type User {
+  interface User {
     id: ID!
     name: String! @upper
     email: String!
@@ -13,7 +13,37 @@ export const typeDefs = gql`
     image: Image
     cumulativeGPA: Float!
     gender: Gender!
-    friends(cumulativeGPA: Float = 50.0  @deprecated): [Friend!]!
+    friends: [Friend!]!
+    # friends(cumulativeGPA: Float = 50.0  @deprecated): [Friend!]!
+  }
+
+  type GrantedBeforeUser implements User {
+    id: ID!
+    name: String! @upper
+    email: String!
+    mobile: String!
+    age: Int!
+    isGraduated: Boolean
+    image: Image
+    cumulativeGPA: Float!
+    gender: Gender!
+    friends: [Friend!]!
+    idea: String!
+    grantedAmount: Int
+  }
+
+  type UserWithFirstParticipation implements User {
+    id: ID!
+    name: String! @upper
+    email: String! 
+    mobile: String!
+    age: Int!
+    isGraduated: Boolean 
+    image: Image
+    cumulativeGPA: Float!
+    gender: Gender!
+    friends: [Friend!]!
+    idea: String!
   }
 
   enum Gender {
@@ -47,6 +77,8 @@ export const typeDefs = gql`
     getImages(width: Int!, height: Int!): [Image]
     graduatedUsers: [User]
     getUsersByGenderAndCumulativeGPA(gender: Gender!, cumulativeGPA: Float!): [User]
+    usersWithFirstParticipation: [UserWithFirstParticipation]
+    grantedBeforeUsers: [GrantedBeforeUser]
   }
 
   input UserInput {

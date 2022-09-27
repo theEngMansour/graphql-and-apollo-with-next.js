@@ -1,9 +1,12 @@
 import { ApolloServer, gql } from 'apollo-server-micro';
-import { resolvers } from 'graphql/resolvers';
-import { typeDefs } from 'graphql/type-defs';
+// import { resolvers } from 'graphql/resolvers';
+// import { typeDefs } from 'graphql/type-defs';
 import { upperDirectiveTransformer } from 'directives/uppercase';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import micro_cors from 'micro-cors';
+
+import { typeDefs } from 'graphql/typeDefsUnion'
+import { resolvers } from 'graphql/resoversUnion'
 
 const cors = micro_cors({
   origin:"https://studio.apollographql.com", 
@@ -17,15 +20,15 @@ const cors = micro_cors({
 })
 
 // Create the base executable schema
-let schema = makeExecutableSchema({
+/* let schema = makeExecutableSchema({
   typeDefs,
   resolvers
 });
 
 // Transform the schema by applying directive logic
 schema = upperDirectiveTransformer(schema, 'upper');
-
-const apolloServer = new ApolloServer({schema})
+ */
+const apolloServer = new ApolloServer({typeDefs, resolvers})
 const startServer = apolloServer.start()
 
 export default cors(async function handler(req, res) {
