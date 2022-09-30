@@ -14,7 +14,6 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-
 app.prepare().then(() => {
   const server = express()
 
@@ -26,7 +25,6 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
-
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express()
@@ -59,6 +57,7 @@ async function startApolloServer(typeDefs, resolvers) {
         }
     ]
   })
+  
   await servers.start()
   servers.applyMiddleware({ app })
   await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve))
