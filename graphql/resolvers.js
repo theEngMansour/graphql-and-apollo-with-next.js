@@ -1,10 +1,8 @@
 // درس الاشتراكات Subscriptions     
-import { users } from './mock_data'
-import { PubSub } from 'graphql-subscriptions';
-
+let { users } = require('./mock_data')
+const { PubSub } = require('graphql-subscriptions')
 const pubSub = new PubSub()
-
-export const resolvers = {
+const resolvers = {
     Gender: {
       MALE: 'male',
       FEMALE: 'female',
@@ -31,3 +29,4 @@ export const resolvers = {
     }
 }
 
+module.exports = { resolvers }
